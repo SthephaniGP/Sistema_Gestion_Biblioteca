@@ -15,9 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Infrastructure\Persistence\MySqlBookRepository;
+use App\Infrastructure\Persistence\MySqlLoanRepository;
+use App\Infrastructure\Persistence\MySqlMemberRepository;
 use App\Application\UseCase\CreateBookService;
 use App\Application\UseCase\ListBooksService;
+use App\Application\UseCase\RegisterLoanService;
 use App\Infrastructure\Http\BookController;
+use App\Infrastructure\Http\LoanController;
 
 // 1. Configuración de la conexión a la Base de Datos (MySQL)
 $dbHost = '127.0.0.1';
@@ -37,10 +41,22 @@ try {
 }
 
 // 2. Inyección de dependencias (Wiring manual de la Arquitectura Hexagonal)
+
+//Repositorios 
 $bookRepository = new MySqlBookRepository($pdo);
 $createBookService = new CreateBookService($bookRepository);
 $listBooksService = new ListBooksService($bookRepository);
 $bookController = new BookController($createBookService, $listBooksService);
+
+//Casos de uso 
+$loanRepository = new MySqlLoanRepository($pdo);
+$memberRepository = new MySqlMemberRepository($pdo);
+$registerLoanService = new RegisterLoanService($bookRepository, $loanRepository, $memberRepository);
+$loanController = new LoanController($registerLoanService);
+
+//Controladores 
+$bookController = new BookController($createBookService, $listBooksService);
+$loanController = new LoanController($registerLoanService);
 
 // 3. Enrutador básico (Router)
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -57,6 +73,11 @@ if ($path === '/books' && $method === 'POST') {
 
 if ($path === '/books' && $method === 'GET') {
     $bookController->index();
+    exit();
+}
+
+if ($path === '/loans' && $method === 'POST') {
+    $loanController->store();
     exit();
 }
 
