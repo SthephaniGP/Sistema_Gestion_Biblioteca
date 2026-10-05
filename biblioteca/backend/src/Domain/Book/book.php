@@ -42,3 +42,5 @@ class Book
     public function totalCopies(): int { return $this->totalCopies; }
     public function availableCopies(): int { return $this->availableCopies; }
 }
+
+
