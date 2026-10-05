@@ -1,0 +1,53 @@
+<div class="container">
+  <h2>Catálogo de Libros</h2>
+
+  <div class="actions">
+    <a routerLink="/books/new" class="btn btn-primary">Registrar Nuevo Libro</a>
+    <a routerLink="/loans/new" class="btn btn-secondary">Solicitar Préstamo</a>
+  </div>
+
+  <div class="filters">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTitle" 
+      placeholder="Buscar por título..." 
+      (input)="onSearch()"
+    />
+    <select [(ngModel)]="filterAvailable" (change)="onSearch()">
+      <option [ngValue]="undefined">Todos los libros</option>
+      <option [ngValue]="true">Solo disponibles</option>
+    </select>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Cargando catálogo...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && books.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>ISBN</th>
+        <th>Título</th>
+        <th>Autor ID</th>
+        <th>Total Copias</th>
+        <th>Disponibles</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books">
+        <td>{{ book.id }}</td>
+        <td>{{ book.isbn }}</td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.authorId }}</td>
+        <td>{{ book.totalCopies }}</td>
+        <td>
+          <span [class.badge-success]="(book.availableCopies ?? 0) > 0" [class.badge-danger]="book.availableCopies === 0">
+            {{ book.availableCopies }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!isLoading && books.length === 0">No se encontraron libros.</p>
+</div>
