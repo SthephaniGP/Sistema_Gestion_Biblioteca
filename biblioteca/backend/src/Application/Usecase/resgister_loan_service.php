@@ -73,4 +73,4 @@ class RegisterLoanService
 
         return $this->loanRepository->save($loanData, $book);
     }
-}    
+}
