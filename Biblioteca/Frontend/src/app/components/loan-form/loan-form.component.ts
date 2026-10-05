@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { LoanService } from '../../services/loan.service';
-import { LoanRequest } from '../../models/library.model';
+import { LoanRequest } from '../../models/library.models';
 
 @Component({
   selector: 'app-loan-form',
@@ -32,7 +32,7 @@ export class LoanFormComponent {
         this.successMessage = `Préstamo registrado exitosamente. Fecha límite de devolución: ${res.dueDate}`;
         setTimeout(() => this.router.navigate(['/books']), 2500);
       },
-      error: (err) => {
+      error: (err: any) => {
         if (err.error && err.error.detail) {
           this.errorMessage = err.error.detail;
         } else {

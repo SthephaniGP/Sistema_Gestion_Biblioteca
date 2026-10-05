@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BookService } from '../../services/book.service';
-import { Book } from '../../models/library.model';
+import { Book } from '../../models/library.models';
 
 @Component({
   selector: 'app-book-form',
