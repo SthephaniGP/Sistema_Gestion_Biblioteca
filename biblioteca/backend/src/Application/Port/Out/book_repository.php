@@ -15,4 +15,8 @@ interface BookRepository
     public function save(Book $book): Book;
     
     public function delete(int $id): void;
+
+
+    // Método añadido para listar libros con filtros y paginación
+    public function search(?string $title, ?int $authorId, ?bool $available, int $page, int $size): array;
 }
